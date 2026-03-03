@@ -5,7 +5,7 @@ local gameId = game.PlaceId
 
 -- List of game-specific scripts
 local scripts = {
-    [4543] = "https://raw.githubusercontent.com/YOURNAME/YOURREPO/main/games/game_4543.lua",
+    [75992362647444] = "loadstring(game:HttpGet("https://raw.githubusercontent.com/Bant3r241/scriptloader/main/games/TapSimulator.lua"))(),
     [123456789] = "https://raw.githubusercontent.com/YOURNAME/YOURREPO/main/games/game_123456789.lua",
     [987654321] = "https://raw.githubusercontent.com/YOURNAME/YOURREPO/main/games/game_987654321.lua"
 }
