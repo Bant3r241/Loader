@@ -1,18 +1,18 @@
 -- Wraith Hub Game Loader
--- This file detects the game and loads the correct script.
+-- Detects the game and loads the correct script.
 
 local gameId = game.PlaceId
 
--- List of game-specific scripts
+-- List of game-specific script URLs
 local scripts = {
-    [75992362647444] = "loadstring(game:HttpGet("https://raw.githubusercontent.com/Bant3r241/scriptloader/main/games/TapSimulator.lua"))(),
-    [123456789] = "https://raw.githubusercontent.com/YOURNAME/YOURREPO/main/games/game_123456789.lua",
-    [987654321] = "https://raw.githubusercontent.com/YOURNAME/YOURREPO/main/games/game_987654321.lua"
+    [75992362647444] = "https://raw.githubusercontent.com/Bant3r241/scriptloader/main/games/TapSimulator.lua",
 }
 
 -- Universal fallback script
-local universal = "https://raw.githubusercontent.com/YOURNAME/YOURREPO/main/games/universal.lua"
+local universal = "https://raw.githubusercontent.com/Bant3r241/scriptloader/main/games/universal.lua"
 
--- Load correct script
+-- Pick correct URL
 local url = scripts[gameId] or universal
+
+-- Load the script
 loadstring(game:HttpGet(url))()
