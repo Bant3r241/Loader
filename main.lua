@@ -1,60 +1,121 @@
 -- Wraith Hub Loader
 
-local Fluent = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/main/source.lua"))()
+local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
 
 -------------------------------------------------
 -- KEY SETTINGS
 -------------------------------------------------
 
-local Key = "WRAITH-ACCESS-2026"
-local KeyLink = "https://linkvertise.com/YOUR-LINK"
+local KEY = "WRAITH-ACCESS-2026"
+local KEY_LINK = "https://linkvertise.com/YOUR-LINK"
 
-local function CheckKey(EnteredKey)
-    return EnteredKey == Key
+-- save key
+local SaveFile = "wraithhub_key.txt"
+
+-------------------------------------------------
+-- GAME LOADER FUNCTION
+-------------------------------------------------
+
+local function LoadGameScript()
+
+    local gameId = game.PlaceId
+
+    local scripts = {
+        [114640202062357] = "https://raw.githubusercontent.com/Bant3r241/scriptloader/main/games/Swing To Brainrots.lua",
+    }
+
+    local url = scripts[gameId]
+
+    if url then
+        loadstring(game:HttpGet(url))()
+    else
+        Fluent:Notify({
+            Title = "Unsupported Game",
+            Content = "This game is not supported by Wraith Hub!",
+            Duration = 5
+        })
+    end
+
 end
 
 -------------------------------------------------
--- KEY SYSTEM
+-- CHECK SAVED KEY
 -------------------------------------------------
 
-local KeySystem = Fluent:CreateKeySystem({
+if isfile and isfile(SaveFile) then
+    if readfile(SaveFile) == KEY then
+        LoadGameScript()
+        return
+    end
+end
+
+-------------------------------------------------
+-- KEY UI
+-------------------------------------------------
+
+local Window = Fluent:CreateWindow({
     Title = "Wraith Hub",
-    Description = "Get the key from Linkvertise",
-    KeyLink = KeyLink,
-    KeyLength = 18,
+    SubTitle = "Key System",
+    TabWidth = 120,
+    Size = UDim2.fromOffset(420, 260),
+})
 
-    Callback = function(EnteredKey)
-        if CheckKey(EnteredKey) then
-            KeySystem:Destroy()
+local KeyTab = Window:AddTab({ Title = "Key System" })
 
-            local gameId = game.PlaceId
+KeyTab:AddParagraph({
+    Title = "Access Required",
+    Content = "Get the key through Linkvertise to use Wraith Hub."
+})
 
-            local scripts = {
-                [114640202062357] = "https://raw.githubusercontent.com/Bant3r241/scriptloader/main/games/Swing To Brainrots.lua",
-            }
+local KeyInput = KeyTab:AddInput("KeyBox", {
+    Title = "Enter Key",
+    Default = "",
+    Placeholder = "Paste key here"
+})
 
-            local url = scripts[gameId]
+KeyTab:AddButton({
+    Title = "Get Key",
+    Callback = function()
+        setclipboard(KEY_LINK)
 
-            if url then
-                loadstring(game:HttpGet(url))()
-            else
-                Fluent:Notify({
-                    Title = "Unsupported Game",
-                    Content = "This game is not supported by Wraith Hub!",
-                    Duration = 5
-                })
-            end
-
-            return true
-        else
-            Fluent:Notify({
-                Title = "Key System",
-                Content = "Invalid key!",
-                Duration = 5
-            })
-            return false
-        end
+        Fluent:Notify({
+            Title = "Copied!",
+            Content = "Linkvertise link copied to clipboard.",
+            Duration = 4
+        })
     end
 })
 
-KeySystem:Load()
+KeyTab:AddButton({
+    Title = "Verify Key",
+    Callback = function()
+
+        if KeyInput.Value == KEY then
+
+            if writefile then
+                writefile(SaveFile, KEY)
+            end
+
+            Fluent:Notify({
+                Title = "Success",
+                Content = "Key verified!",
+                Duration = 3
+            })
+
+            task.wait(1)
+
+            LoadGameScript()
+
+        else
+
+            Fluent:Notify({
+                Title = "Invalid Key",
+                Content = "That key is incorrect.",
+                Duration = 4
+            })
+
+        end
+    end
+})
